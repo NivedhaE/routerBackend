@@ -1,30 +1,19 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const registerRoute = require('./routes/register');
+const express=require('express');
+const app=express();
+const mongoose=require('mongoose')
+const cors=require('cors');
+app.use(express.json());//middleware
+app.use(cors())
 
-const app = express();
-const port = process.env.PORT || 5000;
+const routerurl=require('./router/router') //db+router
+app.use('/app',routerurl);
+//mongodb connection
+if(mongoose.connect('mongodb+srv://db-nivi:Mininivi8499@cluster0.wmxjq.mongodb.net/registration?retryWrites=true&w=majority&appName=Cluster0'))
+    {
+        console.log('database connected')
+    }
 
-// Middleware setup
-app.use(cors());
-app.use(express.json());
-
-// Routes setup
-app.use('/api/register', registerRoute); // Register route for handling registration requests
-
-// MongoDB connection string (Directly added)
-const dbURI = 'mongodb+srv://db-nivi:Mininivi8499@cluster0.wmxjq.mongodb.net/registration?retryWrites=true&w=majority&appName=Cluster0';
-
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('Failed to connect to MongoDB:', err);
-  });
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.listen(4000,()=>
+{
+    console.log('Server is connected with port no 4000');
+})
